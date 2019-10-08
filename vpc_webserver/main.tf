@@ -73,7 +73,7 @@ resource "aws_launch_configuration" "onica_launch" {
 }
 
 resource "aws_autoscaling_group" "onica" {
-  launch_configuration      =   "${aws_launch_configuration.onica_launch.name}" #id of launch configuration
+  launch_configuration      =   "${aws_launch_configuration.onica_launch.name}" #name of launch configuration
   load_balancers            =   ["${aws_elb.onica_elb.id}"]
   vpc_zone_identifier       =   ["${aws_subnet.public.*.id}"]
   
