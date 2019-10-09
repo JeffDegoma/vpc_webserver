@@ -8,5 +8,9 @@
 - `terraform plan`
 - `terraform apply`
 
+### Return ELB endpoint
+- `aws elb describe-load-balancers --load-balancer-names=onica-elb`
+- output of `DNSName` will be ELB endpoint
+
 ### Tear down, run:
 - `terraform destroy` 
