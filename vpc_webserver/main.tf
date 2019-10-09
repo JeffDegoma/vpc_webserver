@@ -63,7 +63,6 @@ resource "aws_launch_configuration" "onica_launch" {
     instance_type           =   "t2.micro"
     security_groups         =   ["${aws_security_group.instance_sg.id}"]
     associate_public_ip_address = true
-    key_name                =   "prgrmmr_1"
 
     user_data             =   "${data.template_cloudinit_config.config.rendered}"
 
@@ -150,12 +149,6 @@ resource "aws_security_group" "instance_sg" {
         cidr_blocks         =   "${var.cidr_range}"
     }
 
-    ingress {
-        from_port   = 22
-        to_port     = 22
-        protocol    = "tcp"
-        cidr_blocks = "${var.cidr_range}"
-    }
 
     egress {
         from_port           =   0
@@ -178,4 +171,5 @@ data "template_cloudinit_config" "config" {
         content             =  "${data.template_file.nginx.rendered}"
     }
 }
+
 
