@@ -1,0 +1,20 @@
+- name: Add epel-release repo
+  yum:
+    name: epel-release
+    state: present
+
+
+- name: Install nginx
+  yum:
+    name: nginx
+    state: present
+
+
+
+- name: Copy multiple files to remote
+  become: yes
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: "{{role_path}}/files/index.html", dest: /usr/share/nginx/html/index.html}
+    - { src: "{{role_path}}/files/nginx.conf", dest: "/etc/nginx/nginx.conf" }
+  notify: Restart Nginx

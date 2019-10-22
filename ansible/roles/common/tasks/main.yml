@@ -1,0 +1,38 @@
+- name: Include Vars
+  include_vars: "{{role_path}}/vars/main.yml"
+
+- name: Install dependendcies
+  yum:
+    name: "{{ packages }}"
+    state: present
+
+- name: Create cert directory
+  file:
+    state: directory
+    path: /etc/ssl/certs/nginx/
+    
+- name: Generate SSL certificate
+  become: yes
+  shell: "{{ generate }}"
+  args:
+    chrdir: /etc/ssl/certs/nginx/
+
+- name: Download new version of OpenSSL
+  get_url:
+    url: https://www.openssl.org/source/openssl-1.1.1a.tar.gz
+    dest: /tmp
+
+- name: Archive OpenSSL
+  unarchive:
+    remote_src: yes
+    src: /tmp/openssl-1.1.1a.tar.gz
+    dest: /tmp
+
+- name: Default openssl installations
+  become: yes
+  command: "{{item}}"
+  with_items:
+    "{{ commands }}"
+  args:
+    chdir: /tmp/openssl-1.1.1a/
+
