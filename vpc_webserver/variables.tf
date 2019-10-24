@@ -28,3 +28,6 @@ variable "az" {
 }
 
 
+variable "ansible_ssh" {
+  default = "~/.ssh/prgrmmr_1.pem"
+}

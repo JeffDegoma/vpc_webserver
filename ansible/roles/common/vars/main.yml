@@ -4,4 +4,4 @@ packages: [unzip, gcc]
 commands: [./config --prefix=/usr --openssldir=/etc/ssl --libdir=lib no-shared zlib-dynamic, zlib-devel, make, make install]
 
 #openssl create self-signed certificate
-generate: [openssl req -x509 -nodes -days 365 -newkey rsa:2048   -addext "subjectAltName = DNS:localhost” -subj /CN=localhost -keyout /etc/ssl/certs/nginx/example.com.key -out /etc/ssl/certs/nginx/example.com.crt]
+generate: [openssl req -x509 -nodes -days 365 -newkey rsa:2048   -addext "subjectAltName = DNS:www.test1.com -subj /CN=www.test1.com -keyout /etc/ssl/certs/nginx/example.com.key -out /etc/ssl/certs/nginx/example.com.crt]

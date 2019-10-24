@@ -47,13 +47,13 @@ resource "aws_route_table_association" "a" {
 ##############################################################################################################
 ##############################################################################################################
 
-data "template_file" "nginx" {
-  template        =   "${file("${path.module}/cloud.cfg")}"
-}
+# data "template_file" "nginx" {
+#   template        =   "${file("${path.module}/cloud.cfg")}"
+# }
 
-data "template_file" "script" {
-  template        =   "${file("${path.module}/userdata.sh")}"
-}
+# data "template_file" "script" {
+#   template        =   "${file("${path.module}/userdata.sh")}"
+# }
 
 
 # Launch Configuration
@@ -64,7 +64,7 @@ resource "aws_launch_configuration" "onica_launch" {
     security_groups         =   ["${aws_security_group.instance_sg.id}"]
     associate_public_ip_address = true
 
-    user_data             =   "${data.template_cloudinit_config.config.rendered}"
+    # user_data             =   "${data.template_cloudinit_config.config.rendered}"
 
     lifecycle {
         create_before_destroy = true #create replacement resource before destroying the original resource
@@ -82,6 +82,10 @@ resource "aws_autoscaling_group" "onica" {
   min_size                  =   2
   max_size                  =   2
   desired_capacity          =   2
+
+  provisioner "local-exec" {
+      command = "ansible-playbook -vv nginx_playbook.yml '${self.public_ip}', --private-key=${var.ansible_ssh}"
+  }
 
   tag {
       key                  =   "Name"
@@ -158,17 +162,6 @@ resource "aws_security_group" "instance_sg" {
     }
     lifecycle   {
         create_before_destroy   =   true
-    }
-}
-
-data "template_cloudinit_config" "config" {
-    part {
-        content_type        =  "text/x-shellscript"
-        content             =   "${data.template_file.script.rendered}"
-    }
-    part {
-        content_type        =  "text/cloud-config"
-        content             =  "${data.template_file.nginx.rendered}"
     }
 }
 

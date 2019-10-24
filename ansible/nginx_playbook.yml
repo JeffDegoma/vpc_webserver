@@ -1,6 +1,6 @@
 ---
 
-- hosts: 
+- hosts: webserver
   become: yes
   roles:
   # - common
